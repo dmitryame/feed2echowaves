@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'oauth'
 require 'feedzirra'
+require "rexml/document"
 
 ##
 # Please, supply all the configuration parameters below
@@ -14,6 +15,8 @@ require 'feedzirra'
 # 
 # ECHOWAVES_URL:    the url of your echowaves installation
 #
+# CREATE_NEW_CONVO: make it true if you want to create a new convo for every post
+#
 # CONVO_ID:         the id of the convo where the feed will be published
 #
 # CONSUMER_KEY:     register your app in ECHOWAVES_URL/oauth_clients to get your consumer key
@@ -25,7 +28,8 @@ require 'feedzirra'
 FEED = 
 METADATA_FILE = "feed2echowaves.metadata"
 TOKENS_FILE = "feed2echowaves.tokens"
-ECHOWAVES_URL = "http://echowaves.com"
+ECHOWAVES_URL = 
+CREATE_NEW_CONVO = 
 CONVO_ID = 
 CONSUMER_KEY = 
 CONSUMER_SECRET = 
@@ -93,14 +97,26 @@ feed.entries.reverse.each_with_index do|i,idx|
     ##
     # customize the info you want to publish here
     #
-    text = "#{BEFORE_TXT}\n#{i.title}\n#{i.url}\n#{AFTER_TXT}"
+    text = "#{BEFORE_TXT}\n#{i.title}\n#{i.url}\n#{AFTER_TXT}"[0, 100]
+
+
+    if(CREATE_NEW_CONVO == true) 
+      #create a convo
+      response = access_token.post("#{ECHOWAVES_URL}/conversations.xml", "conversation[name]=#{text}&conversation[read_only]=0&conversation[private]=0&conversation[something]=")            
+
+      xmldoc = REXML::Document.new response.body
+
+      CONVO_ID = xmldoc.root.elements["id"].text
+    end
 
     access_token.post("#{ECHOWAVES_URL}/conversations/#{CONVO_ID}/messages.xml", "message[message]=#{text}")
     
-    metadata[FEED] = i.published
-    File.open( METADATA_FILE, 'w' ) do|f|
-      f.write Marshal.dump(metadata)
-    end
+    
+    
+    # metadata[FEED] = i.published
+    # File.open( METADATA_FILE, 'w' ) do|f|
+    #   f.write Marshal.dump(metadata)
+    # end
 
     sleep 5
   end

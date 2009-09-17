@@ -9,6 +9,8 @@ TOKENS_FILE:      after the user allows the program to access EchoWaves through 
 
 ECHOWAVES_URL:    the url of your echowaves installation
 
+CREATE_NEW_CONVO: make it true if you want to create a new convo for every post
+
 CONVO_ID:         the id of the convo where the feed will be published
 
 CONSUMER_KEY:     register your app in ECHOWAVES_URL/oauth_clients to get your consumer key
