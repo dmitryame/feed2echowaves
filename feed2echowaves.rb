@@ -97,12 +97,12 @@ feed.entries.reverse.each_with_index do|i,idx|
     ##
     # customize the info you want to publish here
     #
-    text = "#{BEFORE_TXT}\n#{i.title}\n#{i.url}\n#{AFTER_TXT}"[0, 100]
-
+    text = "#{BEFORE_TXT}\n#{i.title}\n#{i.url}\n#{AFTER_TXT}"
+    shorttext = text[0, 100]#for the convo name
 
     if(CREATE_NEW_CONVO == true) 
       #create a convo
-      response = access_token.post("#{ECHOWAVES_URL}/conversations.xml", "conversation[name]=#{text}&conversation[read_only]=0&conversation[private]=0&conversation[something]=")            
+      response = access_token.post("#{ECHOWAVES_URL}/conversations.xml", "conversation[name]=#{shorttext}&conversation[read_only]=0&conversation[private]=0&conversation[something]=")            
 
       xmldoc = REXML::Document.new response.body
 
