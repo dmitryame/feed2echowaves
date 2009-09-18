@@ -26,11 +26,11 @@ require "rexml/document"
 # Also search for the 'text' variable near the end of this file and customize it for the info you want to publish
 #
 FEED = 
-METADATA_FILE = "feed2echowaves.metadata"
-TOKENS_FILE = "feed2echowaves.tokens"
+METADATA_FILE = 
+TOKENS_FILE = 
 ECHOWAVES_URL = 
-CREATE_NEW_CONVO = 
-CONVO_ID = 
+CREATE_NEW_CONVO = true
+CONVO_ID =
 CONSUMER_KEY = 
 CONSUMER_SECRET = 
 BEFORE_TXT = ''
@@ -113,10 +113,10 @@ feed.entries.reverse.each_with_index do|i,idx|
     
     
     
-    # metadata[FEED] = i.published
-    # File.open( METADATA_FILE, 'w' ) do|f|
-    #   f.write Marshal.dump(metadata)
-    # end
+    metadata[FEED] = i.published
+    File.open( METADATA_FILE, 'w' ) do|f|
+      f.write Marshal.dump(metadata)
+    end
 
     sleep 5
   end
